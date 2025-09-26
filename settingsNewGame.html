@@ -1,0 +1,194 @@
+<html lang="en">
+<head>
+	<title>New Round Generate Settings </title>
+	<style>
+<!--		table {
+			width: 100%;
+			table-layout: fixed;
+			border-collapse: collapse;
+		} -->
+		th, td {
+			border: 1px solid black;
+			border-radius: 10px;
+			height: 75px;
+			width: 250px;
+			text-align: center;
+			word-wrap: break-word;
+			background-color: RGB(173, 216, 230);
+			<!--background-color: #90EE90; -->
+		}
+		button {
+			cursor: pointer;
+		}
+		h1 {
+		font-size:30px;
+		}
+		h2 {
+		font-size:20px;
+		}
+		h3 {
+		font-size:25px;
+		}
+		
+	</style>
+</head>
+
+<nav>
+	<a href="home.html">Home</a>
+	<a href="activeGame.html">Card Game Tracker</a>
+</nav>
+
+
+<body>
+	<br>
+	<button onclick="generateGame()">Create New Game with Below Settings</button>
+	<h1>Starting Hand</h1>
+	<table>
+		<tr>
+			<td id="startKillers"> <p> How many Killer Cards you start with</p> <u> <p> temp </p> <p> <br> <button onclick="addStartHand('startKillers',0)">+</button>       <button onclick="subStartHand('startKillers',0)"> - </button> </p> </td>
+			<td id="startLoadouts"> <p> How many Loadout Cards you start with</p> <u> <p> temp </p> <p> <br> <button onclick="addStartHand('startLoadouts',1)">+</button>       <button onclick="subStartHand('startLoadouts',1)"> - </button> </p> </td>
+		</tr>
+	</table>
+	<h1>Killer Card Toggle </h1>
+	<h2>Toggle which killers can be drawn. Useful if you do not own every killer.</h2>
+	<table>
+		<tr>
+			<td id="Trapper"> <button onclick="toggleKillerCard('Trapper',0)">Trapper</button> </td>
+			<td id="Wraith"> <button onclick="toggleKillerCard('Wraith',1)">Wraith</button> </td>
+			<td id="Hillbilly"> <button onclick="toggleKillerCard('Hillbilly',2)">Hillbilly</button> </td>
+			<td id="Nurse"> <button onclick="toggleKillerCard('Nurse',3)">Nurse</button> </td>
+			<td id="Shape"> <button onclick="toggleKillerCard('Shape',4)">Michael Myers</button> </td>
+		</tr>
+		<tr>
+			<td id="Hag"> <button onclick="toggleKillerCard('Hag',5)">Hag</button> </td>
+			<td id="Doctor"> <button onclick="toggleKillerCard('Doctor',6)">Doctor</button> </td>
+			<td id="Huntress"> <button onclick="toggleKillerCard('Huntress',7)">Huntress</button> </td>
+			<td id="Leatherface"> <button onclick="toggleKillerCard('Leatherface',8)">LeatherFace</button> </td>
+			<td id="Freddy"> <button onclick="toggleKillerCard('Freddy',9)">Freddy</button> </td>
+		</tr>
+		<tr>
+			<td id="Pig"> <button onclick="toggleKillerCard('Pig',10)">Pig</button> </td>
+			<td id="Clown"> <button onclick="toggleKillerCard('Clown',11)">Clown</button> </td>
+			<td id="Spirit"> <button onclick="toggleKillerCard('Spirit',12)">Spirit</button> </td>
+			<td id="Legion"> <button onclick="toggleKillerCard('Legion',13)">Legion</button> </td>
+			<td id="Plague"> <button onclick="toggleKillerCard('Plague',14)">Plague</button> </td>
+		</tr>
+		<tr>
+			<td id="Ghostface"> <button onclick="toggleKillerCard('Ghostface',15)">Ghost Face</button> </td>
+			<td id="Demogorgon"> <button onclick="toggleKillerCard('Demogorgon',16)">Demogorgon</button> </td>
+			<td id="Oni"> <button onclick="toggleKillerCard('Oni',17)">Oni</button> </td>
+			<td id="Deathslinger"> <button onclick="toggleKillerCard('Deathslinger',18)">Deathslinger</button> </td>
+			<td id="Pyramidhead"> <button onclick="toggleKillerCard('Pyramidhead',19)">Pyramid Head</button> </td>
+		</tr>
+		<tr>
+			<td id="Blight"> <p> </p> <p> <button onclick="toggleKillerCard('Blight',20)">Blight</button> </td>
+			<td id="Twins"> <button onclick="toggleKillerCard('Twins',21)">Twins</button> </td>
+			<td id="Trickster"> <button onclick="toggleKillerCard('Trickster',22)">Trickster</button> </td>
+			<td id="Nemesis"> <button onclick="toggleKillerCard('Nemesis',23)">Nemesis</button> </td>
+			<td id="Cenobite"> <button onclick="toggleKillerCard('Cenobite',24)">Pinhead (Cenobite)</button> </td>
+		</tr>
+		<tr>
+			<td id="Artist"> <button onclick="toggleKillerCard('Artist',25)">Artist</button> </td>
+			<td id="Sadako"> <button onclick="toggleKillerCard('Sadako',26)">Sadako (Ringu)</button> </td>
+			<td id="Dredge"> <button onclick="toggleKillerCard('Dredge',27)">Dredge</button> </td>
+			<td id="Wesker"> <button onclick="toggleKillerCard('Wesker',28)">Albert Wesker</button> </td>
+			<td id="Knight"> <button onclick="toggleKillerCard('Knight',29)">Knight</button> </td>
+		</tr>
+		<tr>
+			<td id="Skullmerchant"> <button onclick="toggleKillerCard('Skullmerchant',30)">Skull Merchant</button> </td>
+			<td id="Singularity"> <button onclick="toggleKillerCard('Singularity',31)">Singularity</button> </td>
+			<td id="Xenomorph"> <button onclick="toggleKillerCard('Xenomorph',32)">Xenomorph</button> </td>
+			<td id="Chucky"> <button onclick="toggleKillerCard('Chucky',33)">Chucky</button> </td>
+			<td id="Unknown"> <button onclick="toggleKillerCard('Unknown',34)">Unknown</button> </td>
+		</tr>
+		<tr>
+			<td id="Vecna"> <button onclick="toggleKillerCard('Vecna',35)">Vecna (The Lich)</button> </td>
+			<td id="Dracula"> <button onclick="toggleKillerCard('Dracula',36)">Dracula (The Dark Lord)</button> </td>
+			<td id="Houndmaster"> <button onclick="toggleKillerCard('Houndmaster',37)">Hound Master</button> </td>
+			<td id="Ghoul"> <button onclick="toggleKillerCard('Ghoul',38)">Ghoul</button> </td>
+			<td id="Springtrap"> <button onclick="toggleKillerCard('Springtrap',39)">Springtrap (Animatronic)</button> </td>
+		</tr>
+		<tr>
+			<td id="Krasue"> <button onclick="toggleKillerCard('Krasue',40)">Krasue</button> </td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+	<br>
+	<br>
+	<h1>Loadout Cards (Max amount of 9 cards per category)</h1>
+	<h2>Keyword cards only allow using perks/add-ons that appear upon searching the designated keyword within the DbD search bar.<br>
+	The value is parenthesis is the cost to play the card. A negative number card will provide restrictions, but allow higher costs.<br>
+	You can only play a Loadout card if you meet its criteria; You cannot have conflicting cards.</h2>
+	<br>
+	<h3>Perk Loadout Cards</h3>
+	<table>
+		<tr>
+			<td id="teachables"> <p> Card: All three Teachables for chosen killer (3) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('teachables',0)"> + </button>       <button onclick="subPerkCard('teachables',0)"> - </button> </p> </td>
+			<td id="anyperk"> <p> Card: Any one perk of your Choice (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('anyperk',1)"> + </button>       <button onclick="subPerkCard('anyperk',1)"> - </button> </p> </td>
+			<td id="generator"> <p> Card: One perk with Keyword: Generator (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('generator',2)"> + </button>       <button onclick="subPerkCard('generator',2)"> - </button> </p> </td>
+			<td id="lunge"> <p> Card: One or two perks with Keyword: Lunge (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('lunge',3)"> + </button>       <button onclick="subPerkCard('lunge',3)"> - </button> </p> </td>
+			<td id="generic"> <p> Card: Any one Generic perk that is NOT a teachable (1)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('generic',4)"> + </button>       <button onclick="subPerkCard('generic',4)"> - </button> </p> </td>
+		</tr>
+		<tr>
+			<td id="hexundying"> <p> Card: Hex: Undying and one perk with Keyword: Hex (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('hexundying',5)"> + </button>       <button onclick="subPerkCard('hexundying',5)"> - </button> </p> </td>
+			<td id="hex"> <p> Card: One perk with Keyword: Hex (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('hex',6)"> + </button>       <button onclick="subPerkCard('hex',6)"> - </button> </p> </td>
+			<td id="scourgecompass"> <p> Card: Scourge Hook: Jagged Compass and one perk with Keyword: Scourge Hook (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('scourgecompass',7)"> + </button>       <button onclick="subPerkCard('scourgecompass',7)"> - </button> </p> </td>
+			<td id="scourge"> <p> Card: One perk with Keyword: Scourge Hook (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('scourge',8)"> + </button>       <button onclick="subPerkCard('scourge',8)"> - </button> </p> </td>
+			<td id="token"> <p> Card: One perk with Keyword: Token (1)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('token',9)"> + </button>       <button onclick="subPerkCard('token',9)"> - </button> </p> </td>
+		</tr>
+		<tr>
+			<td id="exposed"> <p> Card: One perk with Keyword: Exposed (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('exposed',10)"> + </button>       <button onclick="subPerkCard('exposed',10)"> - </button> </p> </td>
+			<td id="vault"> <p> Card: One perk with Keyword: Vault (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('vault',11)"> + </button>       <button onclick="subPerkCard('vault',11)"> - </button> </p> </td>
+			<td id="endgame"> <p> Card: Two perks with Keyword: End Game (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('endgame',12)"> + </button>       <button onclick="subPerkCard('endgame',12)"> - </button> </p> </td>
+			<td id="faster"> <p> Card: Two perks with Keyword: Faster (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('faster',13)"> + </button>       <button onclick="subPerkCard('faster',13)"> - </button> </p> </td>
+			<td id="blood"> <p> Card: One perk with Keyword: Blood (1)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('blood',14)"> + </button>       <button onclick="subPerkCard('blood',14)"> - </button> </p> </td>
+		</tr>
+		<tr>
+			<td id="morestun"> <p> Card: Bring Dark Arrogance, CANNOT bring Enduring (-1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('morestun',15)"> + </button>       <button onclick="subPerkCard('morestun',15)"> - </button> </p> </td>
+			<td id="scream"> <p> Card: One perk with Keyword: Scream (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('scream',16)"> + </button>       <button onclick="subPerkCard('scream',16)"> - </button> </p> </td>
+			<td id="obsession"> <p> Card: One or two perks with Keyword: Obsession (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('obsession',17)"> + </button>       <button onclick="subPerkCard('obsession',17)"> - </button> </p> </td>
+			<td id="healing"> <p> Card: One perk with Keyword: Healing (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('healing',18)"> + </button>       <button onclick="subPerkCard('healing',18)"> - </button> </p> </td>
+			<td id="block"> <p> Card: One perk with Keyword: Block (2)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('block',19)"> + </button>       <button onclick="subPerkCard('block',19)"> - </button> </p> </td>
+		</tr>
+	</table>
+	<br>
+	<h3>Add-On Loadout Cards</h3>
+	<table>
+		<tr>
+			<td id="brownsAdd"> <p> Card: Two brown [common] add-ons (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('brownsAdd',0)"> + </button>       <button onclick="subOnCard('brownsAdd',0)"> - </button> </p> </td>
+			<td id="greensAdd"> <p> Card: Two green [uncommon] add-ons (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('greensAdd',1)"> + </button>       <button onclick="subOnCard('greensAdd',1)"> - </button> </p> </td>
+			<td id="bluesAdd"> <p> Card: One blue [rare] add-on (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('bluesAdd',2)"> + </button>       <button onclick="subOnCard('bluesAdd',2)"> - </button> </p> </td>
+			<td id="purpleAdd"> <p> Card: One purple [very rare] add-on (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('purpleAdd',3)"> + </button>       <button onclick="subOnCard('purpleAdd',3)"> - </button> </p> </td>
+			<td id="redsAdd"> <p> Card: Both Iridescent [Visceral] add-ons (2)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('redsAdd',4)"> + </button>       <button onclick="subOnCard('redsAdd',4)"> - </button> </p> </td>
+		</tr>
+		<tr>
+			<td id="anyLowAdd"> <p> Card: One brown [common] or green [uncommon] add-on (0) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('anyLowAdd',5)"> + </button>       <button onclick="subOnCard('anyLowAdd',5)"> - </button> </p> </td>
+			<td id="noAdd"> <p> Card: Take no add-ons (-1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('noAdd',6)"> + </button>       <button onclick="subOnCard('noAdd',6)"> - </button> </p> </td>
+			<td id="anyMidAdd"> <p> Card: One blue [rare] or purple [very rare] add-on (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('anyMidAdd',7)"> + </button>       <button onclick="subOnCard('anyMidAdd',7)"> - </button> </p> </td>
+			<td id="sneakyAdd"> <p> Card: One add-on with Keyword: Undetectable (0) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('sneakyAdd',8)"> + </button>       <button onclick="subOnCard('sneakyAdd',8)"> - </button> </p> </td>
+			<td id="singleRedAdd"> <p> Card: One Iridescent [Visceral] add-on (2)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('singleRedAdd',9)"> + </button>       <button onclick="subOnCard('singleRedAdd',9)"> - </button> </p> </td>
+		</tr>
+		<tr>
+			<td id="durationAdd"> <p> Card: One or two add-ons with Keyword: Duration (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('durationAdd',10)"> + </button>       <button onclick="subOnCard('durationAdd',10)"> - </button> </p> </td>
+			<td id="anyAdd"> <p> Card: Any two add-ons (3) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('anyAdd',11)"> + </button>       <button onclick="subOnCard('anyAdd',11)"> - </button> </p> </td>
+			<td id="speedAdd"> <p> Card: One add-on with Keyword: Speed (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('speedAdd',12)"> + </button>       <button onclick="subOnCard('speedAdd',12)"> - </button> </p> </td>
+			<td id="poinAdd"> <p> Card: Only one add-on can be brought, with the Keyword: Poin (-2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('poinAdd',13)"> + </button>       <button onclick="subOnCard('poinAdd',13)"> - </button> </p> </td>
+			<td id="basicAdd"> <p> Card: One add-on with Keyword: Basic Attack (0)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('basicAdd',14)"> + </button>       <button onclick="subOnCard('basicAdd',14)"> - </button> </p> </td>
+		</tr>
+	</table>
+	<br>
+	<br>
+	<br>
+	<button onclick="standardDefaultPerks()">Reset Loadout Cards to Default Values</button>
+	<br>
+	<br>
+	<br>
+	<br>
+	<button onclick="deleteStorage()">Delete ALL Local Session Storage</button>
+<script src="settings.js"></script>
+</body>
+
+</html>
