@@ -1019,7 +1019,7 @@ function loadSave() {
 	while (stat) {
 		temp = localStorage.getItem("saveC" + index);
 		if (temp) {
-			temp = removeEndingNumbers(nam);
+			temp = removeEndingNumbers(temp);
 			cooldowns.push(temp);
 			index ++;
 		} else {
@@ -1050,4 +1050,5 @@ window.onload = (event) => {
 	createKillerList();
 	createLoadoutList();
 	resetLists();
+
 };
