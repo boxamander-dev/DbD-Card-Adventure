@@ -1037,6 +1037,7 @@ window.onload = (event) => {
 	  case 0:
 		console.log("Load Save Function");
 		loadSave();
+		sessionStorage.removeItem("new");
 	  break;
 	  case 1:
 		console.log("Session Transfer Info Function");
@@ -1052,3 +1053,4 @@ window.onload = (event) => {
 	resetLists();
 
 };
+
