@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-	<title>Active Card Adventure (BETA)</title>
+	<title>Active Card Adventure </title>
 	<style>
 		table {
 			table-collapse:collapse;
@@ -23,15 +23,18 @@
 			<!--background-color: #90EE90; -->
 		}
 		li {
-		background-color: #D3D3D3;
-		border: 1px;
+		background-color: #F2F2F2;
+		border: 1px solid #000000;
 		padding: 10px;
+		list-style-type: none;
 		margin-bottom: 8px;
 		width: fit-content;
 		cursor: pointer;
 		}
 		button {
 			cursor: pointer;
+			padding: 5px 8px;
+			margin: 0px 5px;
 		}
 		h1 {
 		font-size:30px;
@@ -42,92 +45,153 @@
 		h3 {
 		font-size:25px;
 		}
+		h4 {
+		font-size:16px;
+		margin:0px 10px 5px 0px;
+		}
+		h5 {
+		font-size:20px;
+		margin:0px 20px 5px 20px;
+		}
+		.sameline {
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		padding-left:10px;
+		padding-right:10px;
+		}
+		.onPage {
+		cursor:default;
+		background-color: #A9A9A9;
+		pointer-events: none;
+		}
+		.displayOnly {
+		cursor:default;
+		border:none;
+		background-color:none;
+		word-wrap:break-word;
+		margin-bottom:3px;
+		}
+		.hidden {
+		display:none;
+		}
 		
 	</style>
 </head>
 
 <nav>
-	<a href="index.html">Home</a>            <a href="settingsNewGame.html">Generate a new game</a>
+	<a href="index.html" style="background-color:white; border:solid; padding:8px; margin:15px;">Home</a><a href="settingsNewGame.html" style="background-color:white; border:solid; padding:8px;">Generate a new game</a>
 </nav>
 </head>
 
-<body>
+<body style="background-color:#36454F">
 	<br>
-	<div style="float:left; width:15%; z-index:1;">
-		<h2><u>Choose a Killer Card</u></h2>
-		<ul id="killerList">
-		</ul></div>
-		<div style="float:left; width:15%; z-index:1;">
-		<h2><u>Select Loadout Cards</u></h2>
-		<ul id="loadoutList">
-		</ul></div>
-	<div style="float:left; width:15%; z-index:1;">
-		<h2><u>Final Build</u></h2>
-		<ul id="selectedList">
-		</ul></div>
+	<div style="float:left; width:90%; z-index:1;" id="masterAvailLoadouts">
+		<div style="float:left; width:15%; z-index:1; justify-content:center;">
+			<h2 style="text-align:center; color:#E3DAC9;"><u>Choose a Killer Card</u></h2>
+			<ul id="killerList" style="text-align:center;">
+			</ul></div>
+		<div style="float:left; width:40%; z-index:1;">
+			<h2 style="text-align:center; color:#E3DAC9;"><u>Select Loadout Cards</u></h2>
+			<div class="sameline"><ul id="loadoutListPerks"></ul><ul id="loadoutListAdd"></ul></div>
+		</div>
+		<div style="float:left; width:20%; z-index:1; padding:7px;">
+			<h2 style="text-align:center; color:#E3DAC9;"><u>Final Build</u></h2>
+			<div id="killerBG" style="background-image: url('images/DbD Card - Back.png'); display:inline-block; width:222px; height:309px; justify-content:center;"> <img style="margin:auto; max-width:100%; height:auto;" id="killerPic" src="images/DbD Card - Back.png"></img></div>
+			<ul id="selectedList" style="cursor:default;">
+			</ul>
+		</div>
 	</div>
 	<br>
-	<h1 style="absolute:left; clear:left; z-index:2;">Results of the Match</h1>
-	<table>
-		<tr style="absolute:left; z-index:2;">
-			<td id="resultKills"> <p>Your total Kills</p> <u> <p>0</p> <p> <br> <button onclick="addResults('resultKills',4)">+</button>       <button onclick="subResults('resultKills',0)"> - </button> </p> </td>
-			<td id="resultGens"> <p>Total Generators Completed</p> <u> <p>0</p> <p> <br> <button onclick="addResults('resultGens',5)">+</button>       <button onclick="subResults('resultGens',0)"> - </button> </p> </td>
-			<td id="resultHatch"> <p>Did you close the hatch before all Generators were completed?</p> <u> <p>No</p> <p> <br> <button onclick="toggleResults('resultHatch')">Toggle</button> </p> </td>
-		</tr>
-	</table>
-	<h1 style="absolute:left; clear:left; z-index:2;">Final Point Outcome</h1>
-	<h3 style="absolute:left; clear:left; z-index:2;" id="finalPoints">0</h3>
-	<h2 style="absolute:left; clear:left; z-index:2;">
-	Recommended results for a win below (you do NOT have to follow strictly if you don't want to) <br>
-	Ash/First Difficulty: At least 1 kill <br>
-	Bronze/Second Difficulty: At least 1 point <br>
-	Silver/Third Difficulty: At least 4 points <br>
-	Gold/Fourth Difficulty: At least 5 points <br>
-	Iridescent/Final Difficulty: At least 10 points</h2>
-	<br>
-	<button onclick="updateCooldowns()">Match win!</button>
-	<button onclick="matchLost()">Match lost</button>
 	<br>
 	<br>
+	<div id="handicapSet" style="float:left; z-index:2; cursor:default; width:15%;">
+		<h5 style="background-color:white;border:2px red;">Low tier killer selected! Handicap:</h5><h3 id="handiTex" style="margin:5px; background-color:#D3D3D3;">Free Perk</h3>
+	</div>
 	<br>
-	<button onclick="milestoneReached()">Milestone Reached</button>
+	<div id="matchResults", style="opacity:0; position:fixed; top:0; left:0; right:0; bottom:0; z-index:-1;
+	display: flex; align-items:center; justify-content:center; transition: all 0.15s ease-in-out;
+	background-color: rgba(0,0,0,0.75); text-align:center;">
+		<div style = "background-color: #E3DAC9; justify-content:center; max-height:90%; max-width:75%; overflow-y:scroll;">
+			<h1>Match Results</h1>
+			<button onclick="closeMatchResults()">Cancel Entering Match Results</button>
+			<br>
+			<br>
+			<table style="align-items:center; justify-content:center; text-align:center; margin:0px auto;">
+				<tr>
+					<td id="resultHooks"> <div class="sameline"><p> Survivors on Death Hook: </p><p style="padding:5px;">0</p></div><div class="sameline"><button onclick="subResults('resultHooks',0)">-</button>    <button onclick="addResults('resultHooks',4)">+</button></div></td>
+					<td id="resultGens"><div class="sameline"><p>Total Generators Completed: </p><p style="padding:5px;">0</p></div><div class="sameline"><button onclick="subResults('resultGens',0)">-</button>    <button onclick="addResults('resultGens',5)">+</button></div></td>
+				</tr>
+				<tr>
+					<td id="resultKills"> <div class="sameline"><p>Total Kills: </p><p style="padding:5px;">0</p></div><div class="sameline"><button onclick="subResults('resultKills',0)">-</button>    <button onclick="addResults('resultKills',4)">+</button></div></td>
+					<td id="resultHatch"><p>Did you close the hatch before all Generators were completed?</p><div class="sameline"><button onclick="toggleResults('resultHatch')">Toggle</button><p style="padding:5px;">No</p></div> </td>
+				</tr>
+			</table>
+			<div class="sameline"><h1 style="absolute:left; clear:left; z-index:2;">Final Point Outcome:</h1><h1 id="finalPoints" style="padding:7px;">0</h1></div>
+			<table id="resultStyleTable">
+				<tr>
+					<td><button id="resulS0" onclick="changeResultStyle(0)">Recommended</button> <button id="resulS1" onclick="changeResultStyle(1)">Custom</button></td>
+					<td style="background-color: #b2beb5;">Ash<br><div class="sameline"><p>0</p>+ Points <button class="hidden;" onclick="adjustCustomWin(0,-1);">-</button><button class="hidden;" onclick="adjustCustomWin(0,1);">+</button></div></td>
+					<td style="background-color: #CD7F32;">Bronze<br><div class="sameline"><p>3</p>+ Points<button class="hidden;" onclick="adjustCustomWin(1,-1);">-</button><button class="hidden;" onclick="adjustCustomWin(1,1);">+</button></div></td>
+				</tr>
+				<tr>
+					<td style="background-color: #C0C0C0;">Silver<br><div class="sameline"><p>5</p>+ Points<button class="hidden;" onclick="adjustCustomWin(2,-1);">-</button><button class="hidden;" onclick="adjustCustomWin(2,1);">+</button></div></td>
+					<td style="background-color: #ffd700;">Gold<br><div class="sameline"><p>8</p>+ Points<button class="hidden;" onclick="adjustCustomWin(3,-1);">-</button><button class="hidden;" onclick="adjustCustomWin(3,1);">+</button></div></td>
+					<td style="background-color: #cc4e5c;">Iridescent<br><div class="sameline"><p>11</p>+ Points<button class="hidden;" onclick="adjustCustomWin(4,-1);">-</button><button class="hidden;" onclick="adjustCustomWin(4,1);">+</button></div></td>
+				</tr>
+			</table>
+		<br>
+		<div class="sameline" style="margin:5px;"><button onclick="updateCooldowns()" style="padding:8px; margin:8px;">Match win!</button><button onclick="matchLost()" style="padding:8px; margin:8px;">Match lost</button></div>
+		<br>
+		</div>
+	</div>
+	<div style="display:inline-block; background-color:#808080; border:2px solid black; width:45%; z-index:3;">
+		<h3 style="text-align:center;">Graveyard</h3>
+		<table style="width:100%;">
+			<tr>
+				<th style="width:15%; font-size:22px;">Killer Cards</th>
+				<th style="width:35%; font-size:22px;">Loadout Cards</th>
+			</tr>
+			<tr>
+				<td><ul id="graveKillers" style="text-align:center;"></ul></td>
+				<td><ul id="graveLoadouts" style="text-align:center;"></ul></td>
+			</tr>
+		</table>
+	</div>
 	<br>
 	<br>
 	<br>
-	<table>
-		<tr><h3>Graveyard</h3>
-			<td>Killer Cards</td>
-			<td>Loadout Cards</td>
-		</tr>
-		<tr>
-			<td id="graveKillers"></td>
-			<td id="graveLoadouts"></td>
-		</tr>
-	</table>
+	<div class="sameline;" style="text-align:left;">
+		<button onclick="enterMatchResults()" style="font-size:20px; padding:10px;">Enter Match Results</button>
+		<button onclick="milestoneSet()" style="font-size:20px; padding:10px;">Milestone Reached</button>
+		<button onclick="openHistory()" style="font-size:18px; padding:10px;">Match History</button>
+	</div>
+	<br>
 	<br>
 	<br>
 	<button onclick="manualEdit()">Manually Edit Settings</button>
 	<div id="killerSettings", style="opacity:0; position:fixed; top:0; left:0; right:0; bottom:0; z-index:-1;
 	display: flex; align-items:center; justify-content:center; transition: all 0.5s ease-in-out;
 	background-color: rgba(0,0,0,0.75); text-align:center;">
-		<div style = "background-color: #FFFFFF;">
+		<div style = "background-color: #E3DAC9; max-height:90%; max-width:85%; overflow-y:scroll;">
 			<h1>Manual Adjustments - Killer</h1>
 			<button onclick="closeManual()">Close Editing</button>
 			<br>
 			<table style="align-items:center; justify-content:center;text-align:center;">
 				<tr>
-					<td>Max Loadout Cost<br><div style="text-align:center; justify-content:center;"><button onclick="editMaxCost(1)">+</button>  <p id="maxCost">4</p>  <button onclick="editMaxCost(-1)">-</button></div></td>
-					<td><button onclick="manualKillerLast()">Previous</button></td>
-					<td><h1 id ="mEditorK">Trapper</h1></td>
-					<td><button onclick="manualKillerNext()">Next</button></td>
-					<td><button onclick="manualLoadoutEdit()">Swap to Loadout Edits</button></td>
+					<td id="maxCostStyler"><button onclick="mEditorToggle(0)">Global</button><br><button style="margin:7px;" onclick="mEditorToggle(1)">Tier Based</button><br><button onclick="mEditorToggle(2)">Unique</button></td>
+					<td id="maxCostDesc"><h4>Max Loadout Cost</h4><br><div style="text-align:center; justify-content:center;" class="sameline"><button onclick="editMaxCost(-1)">-</button>  <h5 id="maxCost">4</h5>  <button onclick="editMaxCost(1)">+</button></div></td>
+					<td><h4>Editing for</h4><h1 id ="mEditorK">Trapper</h1><div style="sameline"><button onclick="manualKillerLast()">Previous</button><button onclick="manualKillerNext()">Next</button></div></td>
+					<td id="tierEditStyler"><h3>Tier Adjustment</h3><button onclick="mTierToggle(1)">Low</button><button onclick="mTierToggle(2)">Mid</button><button onclick="mTierToggle(3)">Top</button></td>
+					<td><button onclick="manualLoadoutEdit()">Swap to Loadout Edits</button>
+					<button onclick="manualMiscEdit()">Swap to Tier Edits</button></td>
 				</tr>
 			</table>
 			<br>
 			<h3> Current Status</h3>
 			<h2 id="mDesc">Available</h2>
 			<table>
-				<tr>
+				<tr id="killerMButtons">
 					<td><button onclick="manualAdjustmentKill(0)">Not available</button></td>
 					<td><button onclick="manualAdjustmentKill(1)">Graveyard</button></td>
 					<td><button onclick="manualAdjustmentKill(2)">Available</button></td>
@@ -140,17 +204,19 @@
 	<div id="loadoutSettings", style="opacity:0; position:fixed; top:0; left:0; right:0; bottom:0; z-index:-1;
 	display: flex; align-items:center; justify-content:center; transition: all 0.5s ease-in-out;
 	background-color: rgba(0,0,0,0.75); text-align:center;">
-		<div style = "background-color: #FFFFFF;">
+		<div style = "background-color: #E3DAC9; max-height:90%; max-width:85%; overflow-y:scroll;">
 			<h1>Manual Adjustments - Loadout</h1>
 			<button onclick="closeManual()">Close Editing</button>
 			<br>
 			<table style="align-items:center; justify-content:center;text-align:center;">
 				<tr>
-					<td>Max Loadout Cost<br><div style="text-align:center; justify-content:center;"><button onclick="editMaxCost(1)">+</button>  <p id="maxCost2">4</p>  <button onclick="editMaxCost(-1)">-</button></div></td>
+					<td><div class="sameline"><h4>Total Loadout Cards: </h4><h4 id="mEditTotalL"></h4></div><div class="sameline"><h4>In Deck: </h4><h4 id="mEditTotalLDeck"></h4></div>
+					<div class="sameline"><h4>In Hand: </h4><h4 id="mEditTotalLHand"></h4></div><div class="sameline"><h4>In Graveyard: </h4><h4 id="mEditTotalLGrave"></h4></div></td>
 					<td><button onclick="manualLoadoutLast()">Previous</button></td>
 					<td><p id ="mEditorL">Trapper</p></td>
 					<td><button onclick="manualLoadoutNext()">Next</button></td>
-					<td><button onclick="manualEdit()">Swap to Killer Edits</button></td>
+					<td><button onclick="manualEdit()">Swap to Killer Edits</button>
+					<button onclick="manualMiscEdit()">Swap to Tier Edits</button></td>
 				</tr>
 			</table>
 			<br>
@@ -165,7 +231,95 @@
 			</table>
 		</div>
 	</div>
-	
+	<div id="tierSettings", style="opacity:0; position:fixed; top:0; left:0; right:0; bottom:0; z-index:-1;
+	display: flex; align-items:center; justify-content:center; transition: all 0.5s ease-in-out;
+	background-color: rgba(0,0,0,0.75); text-align:center;">
+		<div style = "background-color: #E3DAC9; max-height:90%; max-width:85%; overflow-y:scroll;">
+			<h1>Manual Adjustments - Tiers</h1>
+			<button onclick="closeManual()">Close Editing</button>
+			<br>
+			<table>
+				<h2>Weighted Tier Draw Settings</h2>
+				<tr>
+					<td id="weightLow"><h2>Low Tier</h2><div class="sameline"><button onclick="adjustTierWeight(0,-5)">-5</button><button onclick="adjustTierWeight(0,-1)">-</button><h2>5</h2><button onclick="adjustTierWeight(0,1)">+</button><button onclick="adjustTierWeight(0,5)">+5</button></div>
+					<h2>33% chance for this tier</h2></td>
+					<td id="weightMid"><h2>Mid Tier</h2><div class="sameline"><button onclick="adjustTierWeight(1,-5)">-5</button><button onclick="adjustTierWeight(1,-1)">-</button><h2>5</h2><button onclick="adjustTierWeight(1,1)">+</button><button onclick="adjustTierWeight(1,5)">+5</button></div>
+					<h2>33% chance for this tier</h2></td>
+					<td id="weightTop"><h2>Top Tier</h2><div class="sameline"><button onclick="adjustTierWeight(2,-5)">-5</button><button onclick="adjustTierWeight(2,-1)">-</button><h2>5</h2><button onclick="adjustTierWeight(2,1)">+</button><button onclick="adjustTierWeight(2,5)">+5</button></div>
+					<h2>33% chance for this tier</h2></td>
+					<td><button onclick="manualEdit()">Swap to Killer Edits</button><button onclick="manualLoadoutEdit()">Swap to Loadout Edits</button></td>
+				</tr>
+			</table>
+			<table id="tierAdjusts">
+				<h2>Tier Loaodut Costs</h2>
+				<tr>
+					<td><h3>Low Tier Cost</h3><div class="sameline"><button onclick="maxLoadToggleValue(-1,1)">-</button><h2 id="descLow">4</h2><button onclick="maxLoadToggleValue(1,1)">+</button></div></td>
+					<td><h3>Mid Tier Cost</h3><div class="sameline"><button onclick="maxLoadToggleValue(-1,2)">-</button><h2 id="descMid">4</h2><button onclick="maxLoadToggleValue(1,2)">+</button></div></td>
+					<td><h3>Top Tier Cost</h3><div class="sameline"><button onclick="maxLoadToggleValue(-1,3)">-</button><h2 id="descTop">4</h2><button onclick="maxLoadToggleValue(1,3)">+</button></div></td>
+					<td style="background-color:#90EE90;"><h3>Global Cost</h3><div class="sameline"><button onclick="maxLoadToggleValue(-1,0)">-</button><h2 id="desc0">4</h2><button onclick="maxLoadToggleValue(1,0)">+</button></div></td>
+				</tr>
+			</table>
+			<h2>Handicap Settings for Low Tier</h2>
+			<div id="handicapButtons">
+				<table>
+					<tr>
+						<td><button onclick="adjustHandicap(0);">Disable</button></td>
+						<td><button onclick="adjustHandicap(1);">Free Perk</button></td>
+						<td><button onclick="adjustHandicap(2);">Free Add-on</button></td>
+						<td><button onclick="adjustHandicap(3);">Custom</button>
+						<p style="background-color:white; font-size:16px;" class="hidden;" id="customTextEnter" contenteditable="true">Enter Bonus Here</p></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div id="milestoneSettings", style="opacity:0;position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;
+	display:flex;align-items:center;justify-content:center;transition:all 0.15s ease-in-out;
+	background-color: rgba(0,0,0,0.75); text-align:center;">
+		<div style = "background-color: #EFBF04; max-height:90%; max-width:75%; overflow-y:scroll;">
+			<h1>Milestone Reached!</h1>
+			<button onclick="closeManual()">Cancel Milestone</button>
+			<br>
+			<br>
+			<table style="align-items:center; justify-content:center;text-align:center;">
+				<tr>
+					<td><h3>Killer cards to draw</h3><br><h2>Default Amount: 2</h2><br><div class="sameline"><button onclick="subKillerDraw()">-</button><h2 style="padding:5px 10px;" id="drawAmtKill">1</h2><button onclick="addKillerDraw()">+</button></div></td>
+					<td id="milestoneDrawStyle"><h3>Killer card draw style</h3><div class="sameline"><br><button onclick="alterDrawStyle(0)" style="margin:10px;">Random</button><button onclick="alterDrawStyle(1)" style="margin:10px;">Weighted</button></div>
+					<h2 id="descMileDrawStyle">Every available Killer Card has the same chances at being drawn</h2></td>
+					<td><h3>Loadout cards to draw</h3><br><h2>Default Amount: 9</h2><br><div class="sameline"><button onclick="subLoadoutDraw()">-</button><h2 style="padding:5px 10px;" id="drawAmtLoad">3</h2><button onclick="addLoadoutDraw()">+</button></div></td>
+				</tr>
+			</table>
+			<div id="weightEditMilestoner" class="hidden"><button onclick="manualMiscEdit();">Edit Tier Weights Here</button></div>
+			<h1>Loadout Card Draw Style</h1>
+			<table style="align-items:center; justify-content:center;text-align:center;" id="loadoutStyleTable">
+				<tr>
+					<td style="background-color:#90EE90;"><button onclick="loadoutDrawStyle(0)">Fresh Hand (Default Setting)</button></td>
+					<td><h2 id="loadoutStyleDesc">Shuffle entire hand back into deck and redraw cards</h2></td>
+					<td style="background-color:#FFCCCB;"><button onclick="loadoutDrawStyle(1)">Add to Hand</button></td>
+				</tr>
+				<tr>
+					<td style="background-color:#FFCCCB;"><button onclick="loadoutDrawStyle(2)">Fresh Hand, into Graveyard</button></td>
+					<td style="background-color:#FFCCCB;"><button onclick="loadoutDrawStyle(3)">Fresh Hand, reset Graveyard</button></td>
+					<td style="background-color:#FFCCCB;"><button onclick="loadoutDrawStyle(4)">Add to Hand, reset Graveyard</button></td>
+				</tr>
+			</table>
+			<br>
+			<button onclick="milestoneReached()">Confirmed settings, activate Milestone</button>
+			<br>
+			<br>
+		</div>
+	</div>
+	<div id="matchHist", style="opacity:0;position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;
+	display:flex;align-items:center;justify-content:center;transition:all 0.15s ease-in-out;
+	background-color: rgba(0,0,0,0.75); text-align:center;">
+		<div style = "background-color: #D3D3D3; max-height:75%; max-width:80%; overflow-y:scroll;">
+			<h1>Match History</h1>
+			<button onclick="closeHistory()">Close</button>
+			<ul id="matchHistList">
+			</ul>
+		</div>
+	</div>
+
 <script src="activeSettings.js"></script>
 </body>
 

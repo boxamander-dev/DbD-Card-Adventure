@@ -11,183 +11,663 @@
 			border: 1px solid black;
 			border-radius: 10px;
 			height: 75px;
-			width: 250px;
+			min-width: 15%;
 			text-align: center;
 			word-wrap: break-word;
+			position: relative;
 			background-color: RGB(173, 216, 230);
 			<!--background-color: #90EE90; -->
 		}
 		button {
 			cursor: pointer;
+			padding: 5px 8px;
+			margin: 3px;
 		}
 		h1 {
 		font-size:30px;
 		}
 		h2 {
 		font-size:20px;
+		padding-left:15px;
+		padding-right:15px;
 		}
 		h3 {
 		font-size:25px;
 		}
+		img {
+			width: 100%;
+			height: 70%;
+			text-align: center;
+			vertical-align: middle;
+		}
+		
+		
+	.tablink {
+	background-color: #555;
+	color: white;
+	float: left;
+	box-sizing: border-box
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	font-size: 17px;
+	width: 25%;
+	}
+
+	.tablink:hover {
+	background-color: #777;
+	}
+	
+	.onPage {
+		cursor:default;
+		background-color: #A9A9A9;
+		pointer-events: none;
+	}
+	
+	.hidden {
+    display:none;
+	}
+	
+	.outlined {
+		text-shadow: 0px -2px white, 2px 0px white, 0px 2px white, -2px 0px white;
+	}
+	
+	.sameline {
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	}
+
+<!-- Style the tab content (and add height:100% for full page content) -->
+	.tabcontent {
+	color: white;
+	display: none;
+	padding: 100px 20px;
+	height: 100%;
+	}
 		
 	</style>
 </head>
 
 <nav>
-	<a href="index.html">Home</a>
-	<a href="activeGame.html">Card Game Tracker</a>
+	<a href="index.html" style="background-color:white; border:solid; padding:8px; margin:15px;">Home</a>
+	<br>
+	<br>
+	<div class = "tab">
+	<button class = "tablinks onPage" onclick="openTab('killer')">Killers</button>
+	<button class = "tablinks" onclick="openTab('loadout')">Loadout</button>
+	<button class = "tablinks" onclick="openTab('final')">Generate Game</button>
 </nav>
 
 
-<body>
-	<br>
-	<button onclick="generateGame()">Create New Game with Below Settings</button>
+<body style="background-color:#D3D3D3">
+	<div id="final" class = "tabcontent">
 	<h1>Starting Hand</h1>
 	<table>
 		<tr>
-			<td id="startKillers"> <p> How many Killer Cards you start with</p> <u> <p> temp </p> <p> <br> <button onclick="addStartHand('startKillers',0)">+</button>       <button onclick="subStartHand('startKillers',0)"> - </button> </p> </td>
-			<td id="startLoadouts"> <p> How many Loadout Cards you start with</p> <u> <p> temp </p> <p> <br> <button onclick="addStartHand('startLoadouts',1)">+</button>       <button onclick="subStartHand('startLoadouts',1)"> - </button> </p> </td>
+			<td id="startKillers" style="background-color:#E3DAC9;"> <h3 style="margin:8px;"> How many Killer Cards you start with</h3> <u> <h1> temp </h1> </u> <h2>Default: 5</h2><p> <br> <button onclick="subStartHand('startKillers',0)" style="margin:15px;">-</button><button onclick="addStartHand('startKillers',0)" style="margin:15px;"> + </button> </p> </td>
+			<td id="startLoadouts"  style="background-color:#90EE90;"> <h3 style="margin:8px;"> How many Loadout Cards you start with</h3> <u> <h1> temp </h1> </u> <h2>Default: 10</h2><p> <br> <button onclick="subStartHand('startLoadouts',1)" style="margin:15px;">-</button><button onclick="addStartHand('startLoadouts',1)" style="margin:15px;"> + </button> </p> </td>
+			<td id="startDrawStyle"  style="background-color:#ADD8E6;"><h3 style="margin:8px;"> How Killer Cards are drawn</h3><div class="sameline"><button onclick="alterDrawStyle(0)" style="margin:10px;">Random</button><button onclick="alterDrawStyle(1)" style="margin:10px;">Weighted</button></div>
+			<h1 id="drawStyleDesc">Every enabled Killer Card has the same chances at being drawn</h1>
+			</td>
 		</tr>
 	</table>
-	<h1>Killer Card Toggle </h1>
-	<h2>Toggle which killers can be drawn. Useful if you do not own every killer.</h2>
+	<div id="drawStyleWeighted">
+		<h3>Adjust Tier Draw Weights</h3>
+		<h2>Note: If a tier is drawn that has no remaining Killer Cards, a card from the lower tier will be drawn; if this happens to the Low tier, it will then pull from the Top tier.</h2>
+		<table>
+			<tr>
+				<td id="weightLow"><h2>Low Tier</h2><div class="sameline"><button onclick="adjustTierWeight(0,-5)">-5</button><button onclick="adjustTierWeight(0,-1)">-</button><h2>5</h2><button onclick="adjustTierWeight(0,1)">+</button><button onclick="adjustTierWeight(0,5)">+5</button></div>
+				<h2>33% chance for this tier</h2></td>
+				<td id="weightMid"><h2>Mid Tier</h2><div class="sameline"><button onclick="adjustTierWeight(1,-5)">-5</button><button onclick="adjustTierWeight(1,-1)">-</button><h2>5</h2><button onclick="adjustTierWeight(1,1)">+</button><button onclick="adjustTierWeight(1,5)">+5</button></div>
+				<h2>33% chance for this tier</h2></td>
+				<td id="weightTop"><h2>Top Tier</h2><div class="sameline"><button onclick="adjustTierWeight(2,-5)">-5</button><button onclick="adjustTierWeight(2,-1)">-</button><h2>5</h2><button onclick="adjustTierWeight(2,1)">+</button><button onclick="adjustTierWeight(2,5)">+5</button></div>
+				<h2>33% chance for this tier</h2></td>
+			</tr>
+		</table>
+	</div>
+	<br>
+	<h1>Handicap</h1>
+	<h2>Allows an extra bonus to killers in Low tier</h2>
+	<div id="handicapButtons">
+	<button onclick="adjustHandicap(0);">Disable</button>
+	<button onclick="adjustHandicap(1);">Free Perk</button>
+	<button onclick="adjustHandicap(2);">Free Add-on</button>
+	<div class="sameline;"><button onclick="adjustHandicap(3);">Custom</button><p id="customTextEnter" style="background-color:white; font-size:14px; width:35%;" class="hidden;" contenteditable="true">Enter Bonus Here</p></div>
+	</div>
+	<br>
+	<button onclick="generateGame()" style="padding:15px;">Create New Game with Selected Settings</button>
+	</div>
+	<div id="killer" class = "tabcontent">
+	<h1>Killer Card Settings </h1>
+	<h2>Max Loadout Cost Style</h2>
 	<table>
 		<tr>
-			<td id="Trapper"> <button onclick="toggleKillerCard('Trapper',0)">Trapper</button> </td>
-			<td id="Wraith"> <button onclick="toggleKillerCard('Wraith',1)">Wraith</button> </td>
-			<td id="Hillbilly"> <button onclick="toggleKillerCard('Hillbilly',2)">Hillbilly</button> </td>
-			<td id="Nurse"> <button onclick="toggleKillerCard('Nurse',3)">Nurse</button> </td>
-			<td id="Shape"> <button onclick="toggleKillerCard('Shape',4)">Michael Myers</button> </td>
+			<td id="none"> <button onclick="maxLoadCostToggle(0)">Global</button></td>
+			<td id="tier"> <button onclick="maxLoadCostToggle(1)">Tier Based</button></td>
+			<td id="unique" class = "toggleMaxLoad"> <button onclick="maxLoadCostToggle(2)">Unique</button></td>
+		</tr>
+	</table>
+	<h3 id="maxLoadExplain">Every Killer will have the same Loadout Cost (Adjustable)</h3>
+	<br>
+	<table class="hidden" id="globalAdjust" style="width:20%;height:10%;">
+		<tr>
+			<td><h3>Global Loadout Cost</h3><div class="sameline"><button onclick="maxLoadToggleValue(-1,0)">-</button><h2 id="desc0">4</h2><button onclick="maxLoadToggleValue(1,0)">+</button></div></td>
+		</tr>
+	</table>
+	</table>
+	<table class="hidden" id="tierAdjusts">
+		<tr>
+			<td><h3>Low Tier Cost</h3><div class="sameline"><button onclick="maxLoadToggleValue(-1,1)">-</button><h2 id="descLow">4</h2><button onclick="maxLoadToggleValue(1,1)">+</button></div></td>
+			<td><h3>Mid Tier Cost</h3><div class="sameline"><button onclick="maxLoadToggleValue(-1,2)">-</button><h2 id="descMid">4</h2><button onclick="maxLoadToggleValue(1,2)">+</button></div></td>
+			<td><h3>Top Tier Cost</h3><div class="sameline"><button onclick="maxLoadToggleValue(-1,3)">-</button><h2 id="descTop">4</h2><button onclick="maxLoadToggleValue(1,3)">+</button></div></td>
+		</tr>
+	</table>
+	<h2>Toggle various settings per killer, including which are enabled.</h2>
+	<table>
+		<tr>
+					
+				<td id="Trapper" style ="background-image: url('images/Trapper Icon.png')">
+				<h1 class="outlined">Trapper</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Trapper',0)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Trapper',0)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Trapper',0)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Trapper',0)">+</button> </div>
+				</td>
+				<td id="Wraith" style ="background-image: url('images/Wraith Icon.png')">
+				<h1 class="outlined">Wraith</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Wraith',1)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Wraith',1)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Wraith',1)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Wraith',1)">+</button> </div>
+				</td>
+				<td id="Hillbilly" style ="background-image: url('images/Hillbilly Icon.png')">
+				<h1 class="outlined">Hillbilly</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Hillbilly',2)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Hillbilly',2)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Hillbilly',2)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Hillbilly',2)">+</button> </div>
+				</td>
+				<td id="Nurse" style ="background-image: url('images/Nurse Icon.png')">
+				<h1 class="outlined">Nurse</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Nurse',3)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Nurse',3)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Nurse',3)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Nurse',3)">+</button> </div>
+				</td>
+				<td id="Shape" style ="background-image: url('images/Shape Icon.png')">
+				<h1 class="outlined">Michael Myers (The Shape)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Shape',4)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Shape',4)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Shape',4)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Shape',4)">+</button> </div>
+				</td>
 		</tr>
 		<tr>
-			<td id="Hag"> <button onclick="toggleKillerCard('Hag',5)">Hag</button> </td>
-			<td id="Doctor"> <button onclick="toggleKillerCard('Doctor',6)">Doctor</button> </td>
-			<td id="Huntress"> <button onclick="toggleKillerCard('Huntress',7)">Huntress</button> </td>
-			<td id="Leatherface"> <button onclick="toggleKillerCard('Leatherface',8)">LeatherFace</button> </td>
-			<td id="Freddy"> <button onclick="toggleKillerCard('Freddy',9)">Freddy</button> </td>
+				<td id="Hag" style ="background-image: url('images/Hag Icon.png')">
+				<h1 class="outlined">Hag</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Hag',5)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Hag',5)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Hag',5)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Hag',5)">+</button> </div>
+				</td>
+				<td id="Doctor" style ="background-image: url('images/Doctor Icon.png')">
+				<h1 class="outlined">Doctor</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Doctor',6)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Doctor',6)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Doctor',6)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Doctor',6)">+</button> </div>
+				</td>
+				<td id="Huntress" style ="background-image: url('images/Huntress Icon.png')">
+				<h1 class="outlined">Huntress</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Huntress',7)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Huntress',7)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Huntress',7)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Huntress',7)">+</button> </div>
+				</td>
+				<td id="Leatherface" style ="background-image: url('images/Leatherface Icon.png')">
+				<h1 class="outlined">Leatherface (The Cannibal)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Leatherface',8)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Leatherface',8)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Leatherface',8)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Leatherface',8)">+</button> </div>
+				</td>
+				<td id="Freddy" style ="background-image: url('images/Freddy Icon.png')">
+				<h1 class="outlined">Freddy (The Nightmare)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Freddy',9)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Freddy',9)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Freddy',9)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Freddy',9)">+</button> </div>
+				</td>
 		</tr>
 		<tr>
-			<td id="Pig"> <button onclick="toggleKillerCard('Pig',10)">Pig</button> </td>
-			<td id="Clown"> <button onclick="toggleKillerCard('Clown',11)">Clown</button> </td>
-			<td id="Spirit"> <button onclick="toggleKillerCard('Spirit',12)">Spirit</button> </td>
-			<td id="Legion"> <button onclick="toggleKillerCard('Legion',13)">Legion</button> </td>
-			<td id="Plague"> <button onclick="toggleKillerCard('Plague',14)">Plague</button> </td>
+			<td id="Pig" style ="background-image: url('images/Pig Icon.png')">
+				<h1 class="outlined">Pig</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Pig',10)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Pig',10)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Pig',10)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Pig',10)">+</button> </div>
+				</td>
+				<td id="Clown" style ="background-image: url('images/Clown Icon.png')">
+				<h1 class="outlined">Clown</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Clown',11)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Clown',11)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Clown',11)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Clown',11)">+</button> </div>
+				</td>
+				<td id="Spirit" style ="background-image: url('images/Spirit Icon.png')">
+				<h1 class="outlined">Spirit</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Spirit',12)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Spirit',12)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Spirit',12)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Spirit',12)">+</button> </div>
+				</td>
+				<td id="Legion" style ="background-image: url('images/Legion Icon.png')">
+				<h1 class="outlined">Legion</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Legion',13)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Legion',13)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Legion',13)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Legion',13)">+</button> </div>
+				</td>
+				<td id="Plague" style ="background-image: url('images/Plague Icon.png')">
+				<h1 class="outlined">Plague</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Plague',14)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Plague',14)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Plague',14)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Plague',14)">+</button> </div>
+				</td>
 		</tr>
 		<tr>
-			<td id="Ghostface"> <button onclick="toggleKillerCard('Ghostface',15)">Ghost Face</button> </td>
-			<td id="Demogorgon"> <button onclick="toggleKillerCard('Demogorgon',16)">Demogorgon</button> </td>
-			<td id="Oni"> <button onclick="toggleKillerCard('Oni',17)">Oni</button> </td>
-			<td id="Deathslinger"> <button onclick="toggleKillerCard('Deathslinger',18)">Deathslinger</button> </td>
-			<td id="Pyramidhead"> <button onclick="toggleKillerCard('Pyramidhead',19)">Pyramid Head</button> </td>
+				<td id="Ghostface" style ="background-image: url('images/Ghostface Icon.png')">
+				<h1 class="outlined">Ghostface</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Ghostface',15)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Ghostface',15)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Ghostface',15)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Ghostface',15)">+</button> </div>
+				</td>
+				<td id="Demogorgon" style ="background-image: url('images/Demogorgon Icon.png')">
+				<h1 class="outlined">Demogorgon</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Demogorgon',16)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Demogorgon',16)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Demogorgon',16)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Demogorgon',16)">+</button> </div>
+				</td>
+				<td id="Oni" style ="background-image: url('images/Oni Icon.png')">
+				<h1 class="outlined">Oni</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Oni',17)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Oni',17)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Oni',17)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Oni',17)">+</button> </div>
+				</td>
+				<td id="Deathslinger" style ="background-image: url('images/Deathslinger Icon.png')">
+				<h1 class="outlined">Deathslinger</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Deathslinger',18)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Deathslinger',18)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Deathslinger',18)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Deathslinger',18)">+</button> </div>
+				</td>
+				<td id="Pyramidhead" style ="background-image: url('images/Pyramidhead Icon.png')">
+				<h1 class="outlined">Pyramidhead (The Executioner)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Pyramidhead',19)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Pyramidhead',19)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Pyramidhead',19)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Pyramidhead',19)">+</button> </div>
+				</td>
 		</tr>
 		<tr>
-			<td id="Blight"> <p> </p> <p> <button onclick="toggleKillerCard('Blight',20)">Blight</button> </td>
-			<td id="Twins"> <button onclick="toggleKillerCard('Twins',21)">Twins</button> </td>
-			<td id="Trickster"> <button onclick="toggleKillerCard('Trickster',22)">Trickster</button> </td>
-			<td id="Nemesis"> <button onclick="toggleKillerCard('Nemesis',23)">Nemesis</button> </td>
-			<td id="Cenobite"> <button onclick="toggleKillerCard('Cenobite',24)">Pinhead (Cenobite)</button> </td>
+				<td id="Blight" style ="background-image: url('images/Blight Icon.png')">
+				<h1 class="outlined">Blight</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Blight',20)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Blight',20)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Blight',20)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Blight',20)">+</button> </div>
+				</td>
+				<td id="Twins" style ="background-image: url('images/Twins Icon.png')">
+				<h1 class="outlined">Twins</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Twins',21)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Twins',21)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Twins',21)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Twins',21)">+</button> </div>
+				</td>
+				<td id="Trickster" style ="background-image: url('images/Trickster Icon.png')">
+				<h1 class="outlined">Trickster</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Trickster',22)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Trickster',22)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Trickster',22)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Trickster',22)">+</button> </div>
+				</td>
+				<td id="Nemesis" style ="background-image: url('images/Nemesis Icon.png')">
+				<h1 class="outlined">Nemesis</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Nemesis',23)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Nemesis',23)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Nemesis',23)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Nemesis',23)">+</button> </div>
+				</td>
+				<td id="Cenobite" style ="background-image: url('images/Cenobite Icon.png')">
+				<h1 class="outlined">Cenobite (Pinhead)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Cenobite',24)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Cenobite',24)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Cenobite',24)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Cenobite',24)">+</button> </div>
+				</td>
 		</tr>
 		<tr>
-			<td id="Artist"> <button onclick="toggleKillerCard('Artist',25)">Artist</button> </td>
-			<td id="Sadako"> <button onclick="toggleKillerCard('Sadako',26)">Sadako (Ringu)</button> </td>
-			<td id="Dredge"> <button onclick="toggleKillerCard('Dredge',27)">Dredge</button> </td>
-			<td id="Wesker"> <button onclick="toggleKillerCard('Wesker',28)">Albert Wesker</button> </td>
-			<td id="Knight"> <button onclick="toggleKillerCard('Knight',29)">Knight</button> </td>
+				<td id="Artist" style ="background-image: url('images/Artist Icon.png')">
+				<h1 class="outlined">Artist</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Artist',25)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Artist',25)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Artist',25)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Artist',25)">+</button> </div>
+				</td>
+				<td id="Sadako" style ="background-image: url('images/Sadako Icon.png')">
+				<h1 class="outlined">Sadako (The Onryō, Ringu)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Sadako',26)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Sadako',26)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Sadako',26)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Sadako',26)">+</button> </div>
+				</td>
+				<td id="Dredge" style ="background-image: url('images/Dredge Icon.png')">
+				<h1 class="outlined">Dredge</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Dredge',27)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Dredge',27)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Dredge',27)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Dredge',27)">+</button> </div>
+				</td>
+				<td id="Wesker" style ="background-image: url('images/Wesker Icon.png')">
+				<h1 class="outlined">Albert Wesker (The Mastermind)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Wesker',28)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Wesker',28)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Wesker',28)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Wesker',28)">+</button> </div>
+				</td>
+				<td id="Knight" style ="background-image: url('images/Knight Icon.png')">
+				<h1 class="outlined">Knight</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Knight',29)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Knight',29)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Knight',29)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Knight',29)">+</button> </div>
+				</td>
 		</tr>
 		<tr>
-			<td id="Skullmerchant"> <button onclick="toggleKillerCard('Skullmerchant',30)">Skull Merchant</button> </td>
-			<td id="Singularity"> <button onclick="toggleKillerCard('Singularity',31)">Singularity</button> </td>
-			<td id="Xenomorph"> <button onclick="toggleKillerCard('Xenomorph',32)">Xenomorph</button> </td>
-			<td id="Chucky"> <button onclick="toggleKillerCard('Chucky',33)">Chucky</button> </td>
-			<td id="Unknown"> <button onclick="toggleKillerCard('Unknown',34)">Unknown</button> </td>
+				<td id="Skullmerchant" style ="background-image: url('images/Skullmerchant Icon.png')">
+				<h1 class="outlined">Skull Merchant</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Skullmerchant',30)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Skullmerchant',30)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Skullmerchant',30)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Skullmerchant',30)">+</button> </div>
+				</td>
+				<td id="Singularity" style ="background-image: url('images/Singularity Icon.png')">
+				<h1 class="outlined">Singularity</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Singularity',31)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Singularity',31)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Singularity',31)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Singularity',31)">+</button> </div>
+				</td>
+				<td id="Xenomorph" style ="background-image: url('images/Xenomorph Icon.png')">
+				<h1 class="outlined">Xenomorph (Alien)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Xenomorph',32)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Xenomorph',32)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Xenomorph',32)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Xenomorph',32)">+</button> </div>
+				</td>
+				<td id="Chucky" style ="background-image: url('images/Chucky Icon.png')">
+				<h1 class="outlined">Chucky (The Good Guy)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Chucky',33)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Chucky',33)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Chucky',33)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Chucky',33)">+</button> </div>
+				</td>
+				<td id="Unknown" style ="background-image: url('images/Unknown Icon.png')">
+				<h1 class="outlined">Unknown</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Unknown',34)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Unknown',34)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Unknown',34)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Unknown',34)">+</button> </div>
+				</td>
 		</tr>
 		<tr>
-			<td id="Vecna"> <button onclick="toggleKillerCard('Vecna',35)">Vecna (The Lich)</button> </td>
-			<td id="Dracula"> <button onclick="toggleKillerCard('Dracula',36)">Dracula (The Dark Lord)</button> </td>
-			<td id="Houndmaster"> <button onclick="toggleKillerCard('Houndmaster',37)">Hound Master</button> </td>
-			<td id="Ghoul"> <button onclick="toggleKillerCard('Ghoul',38)">Ghoul</button> </td>
-			<td id="Springtrap"> <button onclick="toggleKillerCard('Springtrap',39)">Springtrap (Animatronic)</button> </td>
+				<td id="Vecna" style ="background-image: url('images/Vecna Icon.png')">
+				<h1 class="outlined">Vecna (The Lich)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Vecna',35)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Vecna',35)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Vecna',35)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Vecna',35)">+</button> </div>
+				</td>
+				<td id="Dracula" style ="background-image: url('images/Dracula Icon.png')">
+				<h1 class="outlined">Dracula (The Dark Lord)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Dracula',36)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Dracula',36)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Dracula',36)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Dracula',36)">+</button> </div>
+				</td>
+				<td id="Houndmaster" style ="background-image: url('images/Houndmaster Icon.png')">
+				<h1 class="outlined">Houndmaster</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Houndmaster',37)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Houndmaster',37)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Houndmaster',37)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Houndmaster',37)">+</button> </div>
+				</td>
+				<td id="Ghoul" style ="background-image: url('images/Ghoul Icon.png')">
+				<h1 class="outlined">Ghoul</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Ghoul',38)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Ghoul',38)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Ghoul',38)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Ghoul',38)">+</button> </div>
+				</td>
+				<td id="Springtrap" style ="background-image: url('images/Springtrap Icon.png')">
+				<h1 class="outlined">Springtrap (The Animatronic)</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Springtrap',39)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Springtrap',39)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Springtrap',39)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Springtrap',39)">+</button> </div>
+				</td>
 		</tr>
 		<tr>
-			<td id="Krasue"> <button onclick="toggleKillerCard('Krasue',40)">Krasue</button> </td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
+				<td id="Krasue" style ="background-image: url('images/Krasue Icon.png')">
+				<h1 class="outlined">Krasue</h1>
+				<div class="sameline">
+				<button onclick="toggleKillerCard('Krasue',40)">Toggle</button>   <h2 class="outlined">   Currently Enabled</h2> </div>
+				<div class="sameline">
+				<button onclick="toggleTier('Krasue',40)">Change Tier</button>   <h2 class="outlined">Low</h2> </div>
+				<div class="sameline">
+				<button onclick="killerSubLoad('Krasue',40)">-</button> <h3 class="outlined">Max Loadout Cost:</h3> <h2 class="outlined">4</h2> <button onclick="killerAddLoad('Krasue',40)">+</button> </div>
+				</td>
+			<td style="background-color:#141414;"></td>
+			<td style="background-color:#141414;"></td>
+			<td style="background-color:#141414;"></td>
+			<td style="background-color:#141414;"></td>
+		</tr>
+	</table>
+	</div>
+	<div id="loadout" class = "tabcontent">
+	<h1>Loadout Card Settings</h1>
+	<h2>Keyword cards only allow using perks/add-ons that appear upon searching the designated keyword within the DbD search bar;<br>
+	Otherwise, the search bar should remain empty.<br>
+	<img src="images/Keyword Search Ex.png" style="width:30%; height:50%;"></img>
+	<br>
+	<br>
+	The value in parenthesis at the end is the cost to play the card. A negative number card will provide restrictions, but allow higher costs.<br>
+	<br>
+	You can only play a Loadout card if you meet its criteria; You cannot have conflicting cards. Max limit of 9 cards per type.</h2>
+	<h3><u>Perk Loadout Cards</u></h3>
+	<h2 id="totalperks">Total Perk Cards: 60</h2>
+	<h2 id="totalperks2">Total Loadout Cards: 100</h2>
+	<table>
+		<tr>
+			<td id="teachables"> <p>All three Teachables for your chosen killer (3)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('teachables',0)"> - </button>       <button onclick="addPerkCard('teachables',0)"> + </button> </p> </td>
+			<td id="oddball"> <p> Three or four perks found on ODD NUMBER pages. Cannot have multiple perks from the same page (3)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('oddball',1)"> - </button>       <button onclick="addPerkCard('oddball',1)"> + </button> </p> </td>
+			<td id="evensteven"> <p> Three or four perks found on EVEN NUMBER pages. Cannot have multiple perks from the same page (3)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('evensteven',2)"> - </button>       <button onclick="addPerkCard('evensteven',2)"> + </button> </p> </td>
+			<td id="generic"> <p>Any one or two generic perks that are NOT a teachable (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('generic',3)"> - </button>       <button onclick="addPerkCard('generic',3)"> + </button> </p> </td>
+			<td id="morestun"> <p>Bring Dark Arrogance, CANNOT bring Enduring (-1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('morestun',4)"> - </button>       <button onclick="addPerkCard('morestun',4)"> + </button> </p> </td>
+		</tr>
+		<tr>
+			<td id="anyperk"> <p>Any one perk of your Choice (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('anyperk',5)"> - </button>       <button onclick="addPerkCard('anyperk',5)"> + </button> </p> </td>
+			<td id="otherteaches"><p>Any two or three Teachable Perks from the same killer; can be any killer (2)</p><div class="sameline"> <u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('otherteaches',6)"> - </button><button onclick="addPerkCard('otherteaches',6)"> + </button> </p> </td>
+			<td id="samepage"><p>Four perks from the same perk page; empty search bar (4) </p><div class="sameline"><u>Amount:</u><p style="margin:8px">2</p></div><button onclick="subPerkCard('samepage',7)"> - </button><button onclick="addPerkCard('samepage',7)"> + </button> </p> </td>
+			<td id="shope"><p>Bring the perk Shattered Hope (-1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('shope',8)"> - </button><button onclick="addPerkCard('shope',8)"> + </button> </p> </td>
+			<td id="anythree"><p>Bring any three perks of your choice (MAX cost)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('anythree',9)"> - </button><button onclick="addPerkCard('anythree',9)"> + </button> </p> </td>
+		</tr>
+		<tr>
+			<td id="block"> <p>One perk with Keyword: Block (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('block',10)"> - </button>       <button onclick="addPerkCard('block',10)"> + </button> </p> </td>
+			<td id="blood"> <p>One perk with Keyword: Blood (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('blood',11)"> - </button>       <button onclick="addPerkCard('blood',11)"> + </button> </p> </td>
+			<td id="entity"> <p> Three perks with Keyword: Entity (3)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('entity',12)"> - </button>       <button onclick="addPerkCard('entity',12)"> + </button> </p> </td>
+			<td id="exhaust"> <p> One perk with Keyword: Exhausted (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('exhaust',13)"> - </button>       <button onclick="addPerkCard('exhaust',13)"> + </button> </p> </td>
+			<td id="exitgate"> <p>Two perks with Keyword: Exit Gate (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('exitgate',14)"> - </button>       <button onclick="addPerkCard('exitgate',14)"> + </button> </p> </td>
+		</tr>
+		<tr>
+			<td id="exposed"> <p>One perk with Keyword: Exposed (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('exposed',15)"> - </button>       <button onclick="addPerkCard('exposed',15)"> + </button> </p> </td>
+			<td id="faster"> <p>Two perks with Keyword: Faster (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('faster',16)"> - </button>       <button onclick="addPerkCard('faster',16)"> + </button> </p> </td>
+			<td id="generator"> <p>One perk with Keyword: Generator (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('generator',17)"> - </button>       <button onclick="addPerkCard('generator',17)"> + </button> </p> </td>
+			<td id="health"> <p> One or two perks with Keyword: Health (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('health',18)"> - </button>       <button onclick="addPerkCard('health',18)"> + </button> </p> </td>
+			<td id="healing"> <p>One perk with Keyword: Healing (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('healing',19)"> - </button>       <button onclick="addPerkCard('healing',19)"> + </button> </p> </td>
+		</tr>
+		<tr>
+			<td id="hex"> <p>One perk with Keyword: Hex (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('hex',20)"> - </button>       <button onclick="addPerkCard('hex',20)"> + </button> </p> </td>
+			<td id="hexundying"> <p> Hex: Undying and one perk with Keyword: Hex (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('hexundying',21)"> - </button>       <button onclick="addPerkCard('hexundying',21)"> + </button> </p> </td>
+			<td id="hooking"> <p> Two perks with Keyword: Hooking (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('hooking',22)"> - </button>       <button onclick="addPerkCard('hooking',22)"> + </button> </p> </td>
+			<td id="hinder"> <p> One perk with Keyword: Hinder (0)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('hinder',23)"> - </button>       <button onclick="addPerkCard('hinder',23)"> + </button> </p> </td>
+			<td id="lunge"> <p>One or two perks with Keyword: Lunge (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('lunge',24)"> - </button>       <button onclick="addPerkCard('lunge',24)"> + </button> </p> </td>
+		</tr>
+		<tr>
+			<td id="obsession"> <p>One or two perks with Keyword: Obsession (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('obsession',25)"> - </button>       <button onclick="addPerkCard('obsession',25)"> + </button> </p> </td>
+			<td id="scourge"> <p>One perk with Keyword: Scourge Hook (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('scourge',26)"> - </button>       <button onclick="addPerkCard('scourge',26)"> + </button> </p> </td>
+			<td id="scourgecompass"> <p>Scourge Hook: Jagged Compass and one perk with Keyword: Scourge Hook (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('scourgecompass',27)"> - </button>       <button onclick="addPerkCard('scourgecompass',27)"> + </button> </p> </td>
+			<td id="scream"> <p>One perk with Keyword: Scream (1) </p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('scream',28)"> - </button>       <button onclick="addPerkCard('scream',28)"> + </button> </p> </td>
+			<td id="them"> <p> One or two perks with Keyword: Them (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('them',29)"> - </button>       <button onclick="addPerkCard('them',29)"> + </button> </p> </td>
+		</tr>
+		<tr>
+			<td id="token"> <p>One perk with Keyword: Token (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('token',30)"> - </button>       <button onclick="addPerkCard('token',30)"> + </button> </p> </td>
+			<td id="trap"> <p>One or two perks with Keyword: Trap (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('trap',31)"> - </button>       <button onclick="addPerkCard('trap',31)"> + </button> </p> </td>
+			<td id="undetectable"> <p> One or three perks with Keyword: Undetectable (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('undetectable',32)"> - </button>       <button onclick="addPerkCard('undetectable',32)"> + </button> </p> </td>
+			<td id="vault"> <p>One perk with Keyword: Vault (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('vault',33)"> - </button>       <button onclick="addPerkCard('vault',33)"> + </button> </p> </td>
+			<td id="yaura"> <p>One perk with Keyword: Yellow Aura (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subPerkCard('yaura',34)"> - </button>       <button onclick="addPerkCard('yaura',34)"> + </button> </p> </td>
 		</tr>
 	</table>
 	<br>
-	<br>
-	<h1>Loadout Cards (Max amount of 9 cards per category)</h1>
-	<h2>Keyword cards only allow using perks/add-ons that appear upon searching the designated keyword within the DbD search bar.<br>
-	The value is parenthesis is the cost to play the card. A negative number card will provide restrictions, but allow higher costs.<br>
-	You can only play a Loadout card if you meet its criteria; You cannot have conflicting cards.</h2>
-	<br>
-	<h3>Perk Loadout Cards</h3>
+	<h3><u>Add-On Loadout Cards</u></h3>
+	<h2 id="totaladds">Total Add-On Cards: 30</h2>
+	<h2 id="totaladds2">Total Loadout Cards: 100</h2>
 	<table>
 		<tr>
-			<td id="teachables"> <p> Card: All three Teachables for chosen killer (3) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('teachables',0)"> + </button>       <button onclick="subPerkCard('teachables',0)"> - </button> </p> </td>
-			<td id="anyperk"> <p> Card: Any one perk of your Choice (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('anyperk',1)"> + </button>       <button onclick="subPerkCard('anyperk',1)"> - </button> </p> </td>
-			<td id="generator"> <p> Card: One perk with Keyword: Generator (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('generator',2)"> + </button>       <button onclick="subPerkCard('generator',2)"> - </button> </p> </td>
-			<td id="lunge"> <p> Card: One or two perks with Keyword: Lunge (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('lunge',3)"> + </button>       <button onclick="subPerkCard('lunge',3)"> - </button> </p> </td>
-			<td id="generic"> <p> Card: Any one Generic perk that is NOT a teachable (1)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('generic',4)"> + </button>       <button onclick="subPerkCard('generic',4)"> - </button> </p> </td>
+			<td id="brownsAdd"> <p>Two Brown [Common] add-ons (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('brownsAdd',0)"> - </button>       <button onclick="addOnCard('brownsAdd',0)"> + </button></td>
+			<td id="greensAdd"> <p>Two Green [Uncommon] add-ons (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('greensAdd',1)"> - </button>       <button onclick="addOnCard('greensAdd',1)"> + </button></td>
+			<td id="bluesAdd"> <p>Two Blue [Rare] add-ons (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('bluesAdd',2)"> - </button>       <button onclick="addOnCard('bluesAdd',2)"> + </button> </td>
+			<td id="purplesAdd"> <p>Two Purple [Very Rare] add-ons (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('purplesAdd',3)"> - </button>       <button onclick="addOnCard('purplesAdd',3)"> + </button> </td>
+			<td id="redsAdd"> <p>Both Iridescent [Visceral] add-ons (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('redsAdd',4)"> - </button>       <button onclick="addOnCard('redsAdd',4)"> + </button></td>
 		</tr>
 		<tr>
-			<td id="hexundying"> <p> Card: Hex: Undying and one perk with Keyword: Hex (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('hexundying',5)"> + </button>       <button onclick="subPerkCard('hexundying',5)"> - </button> </p> </td>
-			<td id="hex"> <p> Card: One perk with Keyword: Hex (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('hex',6)"> + </button>       <button onclick="subPerkCard('hex',6)"> - </button> </p> </td>
-			<td id="scourgecompass"> <p> Card: Scourge Hook: Jagged Compass and one perk with Keyword: Scourge Hook (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('scourgecompass',7)"> + </button>       <button onclick="subPerkCard('scourgecompass',7)"> - </button> </p> </td>
-			<td id="scourge"> <p> Card: One perk with Keyword: Scourge Hook (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('scourge',8)"> + </button>       <button onclick="subPerkCard('scourge',8)"> - </button> </p> </td>
-			<td id="token"> <p> Card: One perk with Keyword: Token (1)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('token',9)"> + </button>       <button onclick="subPerkCard('token',9)"> - </button> </p> </td>
+			<td id="anyLowAdd"><p>One Brown [Common] or one Green [Uncommon] add-on (0)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('anyLowAdd',5)"> - </button><button onclick="addOnCard('anyLowAdd',5)"> + </button> </td>
+			<td id="anyMidAdd"><p>One Green [Uncommon] or one Blue [Rare] add-on (0)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('anyMidAdd',6)"> - </button><button onclick="addOnCard('anyMidAdd',6)"> + </button> </td>
+			<td id="anyUpperAdd"><p>One Blue [Rare] or one Purple [Very Rare] add-on (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('anyUpperAdd',7)"> - </button><button onclick="addOnCard('anyUpperAdd',7)"> + </button> </td>
+			<td id="anyTopAdd"><p>One Purple [Very Rare] or one Iridescent [Visceral] add-on (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('anyTopAdd',8)"> - </button><button onclick="addOnCard('anyTopAdd',8)"> + </button> </td>
+			<td id="anyAdd"> <p>Any one add-on (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('anyAdd',9)"> - </button>       <button onclick="addOnCard('anyAdd',9)"> + </button> </td>
 		</tr>
 		<tr>
-			<td id="exposed"> <p> Card: One perk with Keyword: Exposed (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('exposed',10)"> + </button>       <button onclick="subPerkCard('exposed',10)"> - </button> </p> </td>
-			<td id="vault"> <p> Card: One perk with Keyword: Vault (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('vault',11)"> + </button>       <button onclick="subPerkCard('vault',11)"> - </button> </p> </td>
-			<td id="endgame"> <p> Card: Two perks with Keyword: End Game (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('endgame',12)"> + </button>       <button onclick="subPerkCard('endgame',12)"> - </button> </p> </td>
-			<td id="faster"> <p> Card: Two perks with Keyword: Faster (2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('faster',13)"> + </button>       <button onclick="subPerkCard('faster',13)"> - </button> </p> </td>
-			<td id="blood"> <p> Card: One perk with Keyword: Blood (1)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('blood',14)"> + </button>       <button onclick="subPerkCard('blood',14)"> - </button> </p> </td>
+			<td id="noAdd"> <p>Take no add-ons (-1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('noAdd',10)"> - </button>       <button onclick="addOnCard('noAdd',10)"> + </button> </p> </td>
+			<td id="firstGreenAdd"><p>The first [uppermost, then leftmost] Blue [Rare] or Purple [Very Rare] add-on (0)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('firstGreenAdd',11)"> - </button><button onclick="addOnCard('firstGreenAdd',11)"> + </button>  </td>
+			<td id="midColAdd"><p>One or two add-ons that are in the middle column of any page (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('midColAdd',12)"> - </button><button onclick="addOnCard('midColAdd',12)"> + </button> </td>
+			<td id="cornersAdd"><p>One add-on from the top left, top right, bottom left, or bottom right corner on Page 1 (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('cornersAdd',13)"> - </button><button onclick="addOnCard('cornersAdd',13)"> + </button> </td>
+			<td id="hiLoAdd"> <p>One Brown [Common] and one Iridescent [Visceral] add-on (2)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('hiLoAdd',14)"> - </button><button onclick="addOnCard('hiLoAdd',14)"> + </button> </td>
 		</tr>
 		<tr>
-			<td id="morestun"> <p> Card: Bring Dark Arrogance, CANNOT bring Enduring (-1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('morestun',15)"> + </button>       <button onclick="subPerkCard('morestun',15)"> - </button> </p> </td>
-			<td id="scream"> <p> Card: One perk with Keyword: Scream (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('scream',16)"> + </button>       <button onclick="subPerkCard('scream',16)"> - </button> </p> </td>
-			<td id="obsession"> <p> Card: One or two perks with Keyword: Obsession (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('obsession',17)"> + </button>       <button onclick="subPerkCard('obsession',17)"> - </button> </p> </td>
-			<td id="healing"> <p> Card: One perk with Keyword: Healing (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('healing',18)"> + </button>       <button onclick="subPerkCard('healing',18)"> - </button> </p> </td>
-			<td id="block"> <p> Card: One perk with Keyword: Block (2)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addPerkCard('block',19)"> + </button>       <button onclick="subPerkCard('block',19)"> - </button> </p> </td>
-		</tr>
-	</table>
-	<br>
-	<h3>Add-On Loadout Cards</h3>
-	<table>
-		<tr>
-			<td id="brownsAdd"> <p> Card: Two brown [common] add-ons (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('brownsAdd',0)"> + </button>       <button onclick="subOnCard('brownsAdd',0)"> - </button> </p> </td>
-			<td id="greensAdd"> <p> Card: Two green [uncommon] add-ons (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('greensAdd',1)"> + </button>       <button onclick="subOnCard('greensAdd',1)"> - </button> </p> </td>
-			<td id="bluesAdd"> <p> Card: One blue [rare] add-on (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('bluesAdd',2)"> + </button>       <button onclick="subOnCard('bluesAdd',2)"> - </button> </p> </td>
-			<td id="purpleAdd"> <p> Card: One purple [very rare] add-on (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('purpleAdd',3)"> + </button>       <button onclick="subOnCard('purpleAdd',3)"> - </button> </p> </td>
-			<td id="redsAdd"> <p> Card: Both Iridescent [Visceral] add-ons (2)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('redsAdd',4)"> + </button>       <button onclick="subOnCard('redsAdd',4)"> - </button> </p> </td>
-		</tr>
-		<tr>
-			<td id="anyLowAdd"> <p> Card: One brown [common] or green [uncommon] add-on (0) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('anyLowAdd',5)"> + </button>       <button onclick="subOnCard('anyLowAdd',5)"> - </button> </p> </td>
-			<td id="noAdd"> <p> Card: Take no add-ons (-1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('noAdd',6)"> + </button>       <button onclick="subOnCard('noAdd',6)"> - </button> </p> </td>
-			<td id="anyMidAdd"> <p> Card: One blue [rare] or purple [very rare] add-on (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('anyMidAdd',7)"> + </button>       <button onclick="subOnCard('anyMidAdd',7)"> - </button> </p> </td>
-			<td id="sneakyAdd"> <p> Card: One add-on with Keyword: Undetectable (0) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('sneakyAdd',8)"> + </button>       <button onclick="subOnCard('sneakyAdd',8)"> - </button> </p> </td>
-			<td id="singleRedAdd"> <p> Card: One Iridescent [Visceral] add-on (2)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('singleRedAdd',9)"> + </button>       <button onclick="subOnCard('singleRedAdd',9)"> - </button> </p> </td>
-		</tr>
-		<tr>
-			<td id="durationAdd"> <p> Card: One or two add-ons with Keyword: Duration (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('durationAdd',10)"> + </button>       <button onclick="subOnCard('durationAdd',10)"> - </button> </p> </td>
-			<td id="anyAdd"> <p> Card: Any two add-ons (3) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('anyAdd',11)"> + </button>       <button onclick="subOnCard('anyAdd',11)"> - </button> </p> </td>
-			<td id="speedAdd"> <p> Card: One add-on with Keyword: Speed (1) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('speedAdd',12)"> + </button>       <button onclick="subOnCard('speedAdd',12)"> - </button> </p> </td>
-			<td id="poinAdd"> <p> Card: Only one add-on can be brought, with the Keyword: Poin (-2) <br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('poinAdd',13)"> + </button>       <button onclick="subOnCard('poinAdd',13)"> - </button> </p> </td>
-			<td id="basicAdd"> <p> Card: One add-on with Keyword: Basic Attack (0)<br> <u>Amount</u> </p> <p> test </p> <p> <br> <button onclick="addOnCard('basicAdd',14)"> + </button>       <button onclick="subOnCard('basicAdd',14)"> - </button> </p> </td>
+			<td id="basicAdd"> <p>One or two add-ons with Keyword: Basic Attack (0)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('basicAdd',15)"> - </button>       <button onclick="addOnCard('basicAdd',15)"> + </button> </td>
+			<td id="durationAdd"> <p>One or two add-ons with Keyword: Duration (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('durationAdd',16)"> - </button>       <button onclick="addOnCard('durationAdd',16)"> + </button> </td>
+			<td id="inflictAdd"> <p>One add-on with Keyword: Inflict --OR-- one add-on with Keyword: Status Effect (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('inflictAdd',17)"> - </button>       <button onclick="addOnCard('inflictAdd',17)"> + </button>  </td>
+			<td id="speedAdd"> <p>One add-on with Keyword: Speed (1)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('speedAdd',18)"> - </button>       <button onclick="addOnCard('speedAdd',18)"> + </button></td>
+			<td id="sneakyAdd"> <p>One add-on with Keyword: Undetectable (0)</p><div class="sameline"><u>Amount:</u><p style="margin:8px;">2</p></div><button onclick="subOnCard('sneakyAdd',19)"> - </button>       <button onclick="addOnCard('sneakyAdd',19)"> + </button></td>
 		</tr>
 	</table>
 	<br>
 	<br>
 	<br>
 	<button onclick="standardDefaultPerks()">Reset Loadout Cards to Default Values</button>
+	</div>
 	<br>
 	<br>
 	<br>
 	<br>
-	<button onclick="deleteStorage()">Delete ALL Local Session Storage</button>
+	<!--<button onclick="deleteStorage()">Delete ALL Local Session Storage</button>-->
 <script src="settings.js"></script>
 </body>
 
