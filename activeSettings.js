@@ -988,6 +988,23 @@ function checkCooldown() {
 }
 
 function updateCooldowns() {
+	let firstPerkList = everyPerk.length;
+	let resul = 0;
+	for (indL = 0; indL < activeLoadouts.length; indL++) {
+		let cardL = activeLoadouts[indL];
+		let cardLNum = removeEndingNumbers(cardL);
+		let dispCard = document.getElementById(cardL);
+		if (everyLoadout.includes(cardLNum)) {
+			resul = everyLoadout.indexOf(cardLNum);
+			} else {
+				console.log("Description find error! updateCooldowns function");
+			}
+		if (resul < firstPerkList) {
+				dispCard.style.backgroundColor = '#CBC3E3'; //Light Purple Hex Code
+			} else {
+				dispCard.style.backgroundColor = '#C4A484'; //Brown Hex Code
+			}
+	}
 	cooldowns = selectedLoadout;
 	histColor = 1;
 	//console.log(cooldowns + " - set cooldowns");
