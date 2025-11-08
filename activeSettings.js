@@ -26,12 +26,12 @@ const everyAddon = ["brownsAdd","greensAdd","bluesAdd","purplesAdd","redsAdd","a
 
 const loadoutExplainAddon = ["Two Brown [Common] add-ons (1)","Two Green [Uncommon] add-ons (1)",
 "Two Blue [Rare] add-ons (1)","Two Purple [Very Rare] add-ons (2)","Both Iridescent [Visceral] add-ons (2)",
-"One Brown[Common] or one Green [Uncommon] add-on(0)","One Green [Uncommon] or one Blue [Rare] add-on (0)",
+"One Brown[Common] or one Green [Uncommon] add-on (0)","One Green [Uncommon] or one Blue [Rare] add-on (0)",
 "One Blue [Rare] or one Purple [Very Rare] add-on (1)","One Purple [Very Rare] or one Iridescent [Visceral] add-on (1)",
 "Any one add-on (2)","Take no add-ons (-1)","The first [uppermost, then leftmost] Blue [Rare] or Purple [Very Rare] add-on (0)",
 "One or two add-ons that are in the middle column of any page (1)",
 "One add-on from the top left, top right, bottom left, or bottom right corner on Page 1 (1)",
-"One Brown [Common] and one Iridescent [Visceral] add-ons (2)","One or two add-ons with Keyword: Basic Attack",
+"One Brown [Common] and one Iridescent [Visceral] add-ons (2)","One or two add-ons with Keyword: Basic Attack (0)",
 "One or two add-ons with Keyword: Duration (1)",
 "One add-on with Keyword: Inflict --OR-- one add-on with Keyword: Status Effect (1)","One add-on with Keyword: Speed (1)",
 "One add-on with Keyword: Undetectable (0)"];
@@ -2589,4 +2589,5 @@ window.onload = (event) => {
 	saveStatus();
 	let handiSet = document.getElementById("handicapSet");	
 	handiSet.classList.add("hidden");
+
 };
